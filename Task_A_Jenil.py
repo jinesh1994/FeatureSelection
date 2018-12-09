@@ -21,10 +21,11 @@ def load_data(file_path):
         print(e)
 
 
-def f_test_for_iris(data, label):
+def f_test_for_iris(data, data_without_label, label):
     try:
         # column wise mean of the dataframe.
-        data_mean = data.mean()
+        # TODO start for loop for groups. here we have 3 groups and 4 features.
+        data_mean = data_without_label.mean()
         data_frame_size = int(data.size)
         data_mean_float = []
         for i in data_mean:
@@ -43,8 +44,8 @@ def f_test_for_iris(data, label):
             container[value] = 0
             unexplained_variance = 0
             for j in range(n):
-                    unexplained_variance = unexplained_variance + (((float(data[value][j]) - data_mean_float[i]) ** 2) / (data_frame_size - k))
-                # print('value is {} j is {} unexplained_variance is {}'.format(value, j, unexplained_variance))
+                unexplained_variance = unexplained_variance + (((float(data[value][j]) - data_mean_float[i]) ** 2) / (data_frame_size - k))
+            # print('value is {} j is {} unexplained_variance is {}'.format(value, j, unexplained_variance))
             container[value] = unexplained_variance
         for key, value in container.items():
             print(key, value)
@@ -55,4 +56,4 @@ def f_test_for_iris(data, label):
 if __name__ == '__main__':
     user_input = input('please provide file name of full file path: ')
     data, labels, data_without_labels = load_data(user_input)
-    f_test_for_iris(data_without_labels, labels)
+    f_test_for_iris(data=data, data_without_label=data_without_labels, label=labels)
