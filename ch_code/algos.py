@@ -63,7 +63,7 @@ class FTest(object):
 
             feature_statistics.append(
                 {
-                    'line_number': index+1,
+                    'line_number': index+2,
                     'F-score':f_score,
                     'data': feature
                 }
