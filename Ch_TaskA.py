@@ -19,7 +19,7 @@ train_data_frame = train_data_frame.T
 
 train_Y = train_data_frame.iloc[0,:]
 train_X = train_data_frame.iloc[1:,:]
-
+# print(train_data_frame)
 train_Y_set = set(train_Y)
 
 # train_Y = train_data_frame.iloc[:, -1]
@@ -29,6 +29,7 @@ feature_statistics = dict()
 for index, feature in enumerate(train_X.values):
     
     feature_averages = {k:{'sum':0, 'n':0, 'avg':0} for k in train_Y_set}
+    # print(feature_averages)
     # Label Wise
     # Avg
     for i, feature_val in enumerate(feature):
@@ -72,11 +73,11 @@ for index, feature in enumerate(train_X.values):
     F_num = sum([avgs['n'] * ((avgs['avg']-overall_avg) ** 2) for avgs in feature_averages.values()]) / (len(train_Y_set)-1)
 
     # F_num = []
-    for ky, avgs in feature_averages.items():
-        print(ky, 
-            (avgs['avg']-overall_avg) ** 2
-        )
+    # for ky, avgs in feature_averages.items():
+    #     print(ky, 
+    #         (avgs['avg']-overall_avg) ** 2
+    #     )
     F_den = sum([(var['n']-1)*var['var'] for var in feature_variances.values()])/ (len(train_Y) - len(train_Y_set))
 
-    print('i', index,' F=',F_num/F_den)
+    print('feature_number', index,' F=',F_num/F_den)
 # [print(f) for f in feature_statistics.values()]
