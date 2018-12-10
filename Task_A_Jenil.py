@@ -8,9 +8,9 @@ def load_data(file_path):
             data_frame = pd.read_csv(file_path, header=None, sep=",")
             class_numbers = data_frame.iloc[:1, :]
             only_data_frame = data_frame.iloc[1:, :]
-            print('Data has been cleaned')
+            # print('Data has been cleaned')
             return data_frame, class_numbers, only_data_frame
-        elif 'lris' in file_path:
+        elif 'Iris' in file_path:
             data_frame = pd.read_csv(file_path, header=None, sep=",")
             class_numbers = data_frame.iloc[:, -1]
             only_data_frame = data_frame.iloc[:, :-1]
@@ -68,8 +68,9 @@ def f_test_for_iris(data):
 
             value_2 = 0
             for k in range(len(variance_values)):
-                value_2 = value_2 + int(data_frame_size[k]) - 1 * variance_values[k]
-            den = float(value_2) / (int(data_frame.size) - len(total_class_numbers))
+                size = int(data_frame_size[k]) - 1
+                value_2 = value_2 + (size * variance_values[k])
+            den = float(value_2) / (len(data_frame) - len(total_class_numbers))
             final_result = numer / den
             print('{} f={}'.format(value, final_result))
             # for average, variance in zip(average_values, variance_values):
