@@ -26,4 +26,21 @@ updated_train_X = [f['data'] for f in top_n_f_data]
 updated_train_Y = labels
 
 fname = 'f_sorted_output.txt'
-store_data(filename=fname, X=updated_train_X, Y=updated_train_Y)
+updated_train_XY_df = store_data(filename=fname, X=updated_train_X, Y=updated_train_Y)
+
+
+# Task B
+# a: SVM linear kernel
+# TODO
+
+# b: linear regression
+# TODO
+
+# c: KNN (k=3)
+# TODO
+
+# d: centroid method
+# TODO
+
+# Task C
+# TODO
