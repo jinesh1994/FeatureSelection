@@ -73,7 +73,7 @@ def f_test(data, label_values):
                 value_2 = value_2 + (size * variance_values[k])
             denominator = float(value_2) / (len(data_frame) - len(total_class_numbers))
             if not numerator or not denominator:
-                final_result = float(0)
+                final_result = float('inf')
             if numerator and denominator:
                 final_result = numerator / denominator
             print('{} f={}'.format(value, final_result))
@@ -92,9 +92,8 @@ def f_test(data, label_values):
             file.write(str(i[0]))
             file.write('\n')
             file.write(str(i[1]))
-        # file.close()
-        get_top_data_as_per_user(data, container_for_groups_sorted_keys, select_rows, label_values)
-        return select_rows
+        index_values = get_top_data_as_per_user(data, container_for_groups_sorted_keys, select_rows, label_values)
+        return select_rows, index_values
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -109,15 +108,20 @@ def take(n, iterable):
 def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
     try:
         data_frame = pd.DataFrame()
+        indexes = []
         data_frame.insert(0, 0, list(labels.values))
-        for i in range(0, input_value):
+        for i in range(input_value):
             temp = all_data[dictionary[i][0]]
+            indexes.append(dictionary[i][0])
             data_frame.insert(i, i + 1, temp)
         new_data_frame = pd.DataFrame()
-        for j in sorted(data_frame.columns.values):
+        sorted_index = sorted(data_frame.columns.values)
+        for j in sorted_index:
             new_data_frame.insert(int(j), int(j), data_frame[j])
         new_data_frame.T.to_csv('jenil_top_{}_ranked_data.csv'.format(input_value), sep=',', header=None, index=False)
+        print('\n')
         print('jenil_top_{}_ranked_data.csv has been generated'.format(input_value))
+        return indexes
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -128,12 +132,12 @@ if __name__ == '__main__':
     try:
         user_input = input('please provide file name of full file path: ')
         data, labels, data_without_labels = load_data(user_input)
-        rows = f_test(data=data, label_values=labels)
+        rows, index = f_test(data=data, label_values=labels)
         data_frame_val = pd.read_csv('jenil_top_{}_ranked_data.csv'.format(rows), header=None, sep=',')
-        print('\n')
+
         # Task B
         # a: SVM linear kernel
-        SVM_classifier_object = SVC()
+        SVM_classifier_object = SVC(kernel='linear')
         SVM_classifier_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
 
         # b: linear regression
@@ -148,22 +152,29 @@ if __name__ == '__main__':
         centroid_object = NearestCentroid()
         centroid_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
 
-        test_filename = "testDataX.txt"
+        test_filename = "GenomeTestX.txt"
         test_X_df = pd.read_csv(test_filename, header=None, sep=',')
         # change this line only if you want to test on different size of rows.
-        test_X = test_X_df.iloc[:100, :]
 
-        predicted_data_SVM = SVM_classifier_object.predict(test_X.T)
-        print("SVM - Prediction" + str(predicted_data_SVM)+'\n')
+        # test_X = test_X_df.iloc[:100, :]
+        new_test_data_frame = pd.DataFrame()
+        test_X_df = test_X_df.T
+        test_X_df.columns = range(1, test_X_df.shape[1] + 1)
+        for i, value in enumerate(index):
+            temp = test_X_df[int(value)]
+            new_test_data_frame.insert(i, i, temp)
 
-        predicted_data_LG = linear_regression_object.predict(test_X.T)
-        print("Linear Regression - Prediction" + str(predicted_data_LG)+'\n')
+        predicted_data_SVM = SVM_classifier_object.predict(new_test_data_frame)
+        print("SVM - Prediction" + str(predicted_data_SVM) + '\n')
 
-        predicted_data_KNN = knn_object.predict(test_X.T)
-        print("KNN - Prediction" + str(predicted_data_KNN)+'\n')
+        predicted_data_LG = linear_regression_object.predict(new_test_data_frame)
+        print("Linear Regression - Prediction" + str(predicted_data_LG) + '\n')
 
-        predicted_data_Centroid = centroid_object.predict(test_X.T)
-        print("Centroid - Prediction" + str(predicted_data_Centroid)+'\n')
+        predicted_data_KNN = knn_object.predict(new_test_data_frame)
+        print("KNN - Prediction" + str(predicted_data_KNN) + '\n')
+
+        predicted_data_Centroid = centroid_object.predict(new_test_data_frame)
+        print("Centroid - Prediction" + str(predicted_data_Centroid) + '\n')
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
