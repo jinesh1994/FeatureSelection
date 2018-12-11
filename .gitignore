@@ -109,3 +109,6 @@ venv.bak/
 
 #output files
 ch_code/f_sorted_output.txt
+*.csv
+jenil_result.txt
+jenil_result_Iris.txt.txt
