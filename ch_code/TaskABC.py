@@ -42,7 +42,7 @@ lg = LinearRegression()
 lg.fit(train_X_df.T, updated_train_Y)
 
 # c: KNN (k=3)
-knn = KNeighborsClassifier()
+knn = KNeighborsClassifier(n_neighbors=3)
 knn.fit(train_X_df.T, updated_train_Y)
 
 # d: centroid method
