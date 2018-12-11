@@ -7,6 +7,8 @@ from algos import FTest
 
 # Task A
 filename = '../GenomeTrainXY.txt'
+# filename = '../ATNTFaceImages400.txt'
+# filename = '../HandWrittenLetters.txt'
 
 train_data_frame = load_dataframe(filename)
 
