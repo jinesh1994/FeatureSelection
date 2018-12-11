@@ -1,6 +1,6 @@
 from sklearn.svm import SVC
 from sklearn.linear_model import LinearRegression
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier, NearestCentroid
 import pandas as pd
 
 from Ch_Datahandler import load_dataframe, store_data
@@ -46,7 +46,8 @@ knn = KNeighborsClassifier()
 knn.fit(train_X_df.T, updated_train_Y)
 
 # d: centroid method
-# TODO
+centroid = NearestCentroid()
+centroid.fit(train_X_df.T, updated_train_Y)
 
 # Task C
 test_filename = "../GenomeTestX.txt"
@@ -61,3 +62,6 @@ print("Linear Regression - Prediction" + str(predicted_data_LG))
 
 predicted_data_KNN = knn.predict(test_X.T)
 print("KNN - Prediction" + str(predicted_data_KNN))
+
+predicted_data_Centroid = centroid.predict(test_X.T)
+print("Centroid - Prediction" + str(predicted_data_Centroid))
