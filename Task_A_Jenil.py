@@ -86,7 +86,7 @@ def f_test(data, label_values):
         for i in selected_rows:
             file = open('jenil_output_result.txt', 'a')
             file.write('\n')
-            file.write(i[0])
+            file.write(str(i[0]))
             file.write('\n')
             file.write(str(i[1]))
         # file.close()
@@ -113,8 +113,8 @@ def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
         new_data_frame = pd.DataFrame()
         for j in sorted(data_frame.columns.values):
             new_data_frame.insert(int(j), int(j), data_frame[j])
-        new_data_frame.T.to_csv('jenil_top_{}_data.csv'.format(input_value), sep=',', header=None, index=False)
-        print('jenil_top_{}_data.csv has been generated'.format(input_value))
+        new_data_frame.T.to_csv('jenil_top_{}_ranked_data.csv'.format(input_value), sep=',', header=None, index=False)
+        print('jenil_top_{}_ranked_data.csv has been generated'.format(input_value))
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
