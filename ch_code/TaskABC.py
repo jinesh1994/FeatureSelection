@@ -2,8 +2,7 @@ import numpy as np
 import pandas as pd
 
 from Ch_Datahandler import load_dataframe, store_data
-from algos import FTest
-
+from algos import FTest, SVM
 
 # Task A
 filename = '../GenomeTrainXY.txt'
@@ -12,8 +11,8 @@ filename = '../GenomeTrainXY.txt'
 
 train_data_frame = load_dataframe(filename)
 
-train_Y = train_data_frame.iloc[0,:]
-train_X = train_data_frame.iloc[1:,:]
+train_Y = train_data_frame.iloc[0, :]
+train_X = train_data_frame.iloc[1:, :]
 # print(train_data_frame)
 
 labels, f_test_data = FTest.calculate(train_X=train_X, train_Y=train_Y)
@@ -29,11 +28,13 @@ updated_train_Y = labels
 
 fname = 'f_sorted_output.txt'
 updated_train_XY_df = store_data(filename=fname, X=updated_train_X, Y=updated_train_Y)
-
+train_X_df = pd.DataFrame(updated_train_X)
 
 # Task B
 # a: SVM linear kernel
-# TODO
+train_data_frame = load_dataframe(filename)
+SVM_classifier = SVM()
+SVM_classifier.fit(train_X_df.T, updated_train_Y)
 
 # b: linear regression
 # TODO
@@ -45,4 +46,8 @@ updated_train_XY_df = store_data(filename=fname, X=updated_train_X, Y=updated_tr
 # TODO
 
 # Task C
-# TODO
+test_filename = "../GenomeTestX.txt"
+test_X_df = load_dataframe(test_filename)
+test_X = test_X_df.iloc[:100, :]
+predicted_data = SVM_classifier.predict(test_X.T)
+print(predicted_data)
