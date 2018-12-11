@@ -61,10 +61,11 @@ class FTest(object):
             if F_den>0:
                 f_score = F_num/F_den
             else:
-                f_score = 0.0
+                f_score = float('inf')
 
             feature_statistics.append(
                 {
+                    'index': index,
                     'line_number': index+2,
                     'F-score':f_score,
                     'data': feature
@@ -76,8 +77,8 @@ class FTest(object):
 
 class SVM(object):
 
-    def __init__(self):
-        self._svc = SVC()
+    def __init__(self, kernel='rbf'):
+        self._svc = SVC(kernel=kernel)
         # kernel : string, optional (default=’rbf’)
         # Specifies the kernel type to be used in the algorithm. It must be one of ‘linear’, ‘poly’, ‘rbf’, ‘sigmoid’, ‘precomputed’ or a callable. If none is given, ‘rbf’ will be used. If a callable is given it is used to pre-compute the kernel matrix from data matrices; that matrix should be an array of shape (n_samples, n_samples)
         

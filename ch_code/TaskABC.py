@@ -8,6 +8,7 @@ from algos import FTest, SVM, LinearRegressionMethod
 
 # Task A
 filename = '../GenomeTrainXY.txt'
+# filename = '../trainDataXY.txt'
 # filename = '../ATNTFaceImages400.txt'
 # filename = '../HandWrittenLetters.txt'
 
@@ -34,7 +35,7 @@ train_X_df = pd.DataFrame(updated_train_X)
 
 # Task B
 # a: SVM linear kernel
-SVM_classifier = SVC()
+SVM_classifier = SVC(kernel='linear')
 SVM_classifier.fit(train_X_df.T, updated_train_Y)
 
 # b: linear regression
@@ -51,17 +52,19 @@ centroid.fit(train_X_df.T, updated_train_Y)
 
 # Task C
 test_filename = "../GenomeTestX.txt"
+# test_filename = "../testDataX.txt"
 test_X_df = load_dataframe(test_filename)
-test_X = test_X_df.iloc[:100, :]
+test_X = [test_X_df.iloc[f['index'], :] for f in top_n_f_data]
+test_X_df = pd.DataFrame(test_X)
 
-predicted_data_SVM = SVM_classifier.predict(test_X.T)
+predicted_data_SVM = SVM_classifier.predict(test_X_df.T)
 print("SVM - Prediction" + str(predicted_data_SVM))
 
-predicted_data_LG = lg.predict(test_X.T)
+predicted_data_LG = lg.predict(test_X_df.T)
 print("Linear Regression - Prediction" + str(predicted_data_LG))
 
-predicted_data_KNN = knn.predict(test_X.T)
+predicted_data_KNN = knn.predict(test_X_df.T)
 print("KNN - Prediction" + str(predicted_data_KNN))
 
-predicted_data_Centroid = centroid.predict(test_X.T)
+predicted_data_Centroid = centroid.predict(test_X_df.T)
 print("Centroid - Prediction" + str(predicted_data_Centroid))
