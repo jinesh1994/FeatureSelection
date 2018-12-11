@@ -148,7 +148,7 @@ if __name__ == '__main__':
         centroid_object = NearestCentroid()
         centroid_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
 
-        test_filename = "GenomeTestX.txt"
+        test_filename = "testDataX.txt"
         test_X_df = pd.read_csv(test_filename, header=None, sep=',')
         test_X = test_X_df.iloc[:100, :]
 
