@@ -130,7 +130,7 @@ if __name__ == '__main__':
         data, labels, data_without_labels = load_data(user_input)
         rows = f_test(data=data, label_values=labels)
         data_frame_val = pd.read_csv('jenil_top_{}_ranked_data.csv'.format(rows), header=None, sep=',')
-
+        print('\n')
         # Task B
         # a: SVM linear kernel
         SVM_classifier_object = SVC()
@@ -150,19 +150,20 @@ if __name__ == '__main__':
 
         test_filename = "testDataX.txt"
         test_X_df = pd.read_csv(test_filename, header=None, sep=',')
+        # change this line only if you want to test on different size of rows.
         test_X = test_X_df.iloc[:100, :]
 
         predicted_data_SVM = SVM_classifier_object.predict(test_X.T)
-        print("SVM - Prediction" + str(predicted_data_SVM))
+        print("SVM - Prediction" + str(predicted_data_SVM)+'\n')
 
         predicted_data_LG = linear_regression_object.predict(test_X.T)
-        print("Linear Regression - Prediction" + str(predicted_data_LG))
+        print("Linear Regression - Prediction" + str(predicted_data_LG)+'\n')
 
         predicted_data_KNN = knn_object.predict(test_X.T)
-        print("KNN - Prediction" + str(predicted_data_KNN))
+        print("KNN - Prediction" + str(predicted_data_KNN)+'\n')
 
         predicted_data_Centroid = centroid_object.predict(test_X.T)
-        print("Centroid - Prediction" + str(predicted_data_Centroid))
+        print("Centroid - Prediction" + str(predicted_data_Centroid)+'\n')
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
