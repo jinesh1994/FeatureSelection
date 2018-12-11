@@ -2,6 +2,7 @@ import pandas as pd
 import sys
 import os
 from contextlib import redirect_stdout
+from itertools import islice
 
 
 def load_data(file_path):
@@ -29,7 +30,7 @@ def load_data(file_path):
         print(e)
 
 
-def f_test_for_iris(data, label_values):
+def f_test(data, label_values):
     try:
         # column wise mean of the dataframe.
         if os.path.isfile('jenil_result.txt'):
@@ -79,11 +80,27 @@ def f_test_for_iris(data, label_values):
                     print(value, final_result)
         container_for_groups_sorted_keys = sorted(container_for_groups.items(), key=lambda t: t[1], reverse=True)
         select_rows = int(input('\nplease select rows you want: '))
+        selected_rows = take(select_rows, container_for_groups_sorted_keys)
+        if os.path.isfile('jenil_output_result.txt'):
+            os.remove('jenil_output_result.txt')
+        for i in selected_rows:
+            file = open('jenil_output_result.txt', 'a')
+            file.write('\n')
+            file.write(i[0])
+            file.write('\n')
+            file.write(str(i[1]))
+        # file.close()
         get_top_data_as_per_user(data, container_for_groups_sorted_keys, select_rows, label_values)
+
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)
+
+
+def take(n, iterable):
+    "Return first n items of the iterable as a list"
+    return list(islice(iterable, n))
 
 
 def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
@@ -107,4 +124,4 @@ def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
 if __name__ == '__main__':
     user_input = input('please provide file name of full file path: ')
     data, labels, data_without_labels = load_data(user_input)
-    f_test_for_iris(data=data, label_values=labels)
+    f_test(data=data, label_values=labels)
