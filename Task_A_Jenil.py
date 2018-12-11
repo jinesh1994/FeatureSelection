@@ -3,6 +3,9 @@ import sys
 import os
 from contextlib import redirect_stdout
 from itertools import islice
+from sklearn.svm import SVC
+from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsClassifier, NearestCentroid
 
 
 def load_data(file_path):
@@ -91,7 +94,7 @@ def f_test(data, label_values):
             file.write(str(i[1]))
         # file.close()
         get_top_data_as_per_user(data, container_for_groups_sorted_keys, select_rows, label_values)
-
+        return select_rows
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -122,6 +125,45 @@ def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
 
 
 if __name__ == '__main__':
-    user_input = input('please provide file name of full file path: ')
-    data, labels, data_without_labels = load_data(user_input)
-    f_test(data=data, label_values=labels)
+    try:
+        user_input = input('please provide file name of full file path: ')
+        data, labels, data_without_labels = load_data(user_input)
+        rows = f_test(data=data, label_values=labels)
+        data_frame_val = pd.read_csv('jenil_top_{}_ranked_data.csv'.format(rows), header=None, sep=',')
+
+        # Task B
+        # a: SVM linear kernel
+        SVM_classifier_object = SVC()
+        SVM_classifier_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+
+        # b: linear regression
+        linear_regression_object = LinearRegression()
+        linear_regression_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+
+        # c: KNN (k=3)
+        knn_object = KNeighborsClassifier(n_neighbors=3)
+        knn_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+
+        # d: centroid method
+        centroid_object = NearestCentroid()
+        centroid_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+
+        test_filename = "GenomeTestX.txt"
+        test_X_df = pd.read_csv(test_filename, header=None, sep=',')
+        test_X = test_X_df.iloc[:100, :]
+
+        predicted_data_SVM = SVM_classifier_object.predict(test_X.T)
+        print("SVM - Prediction" + str(predicted_data_SVM))
+
+        predicted_data_LG = linear_regression_object.predict(test_X.T)
+        print("Linear Regression - Prediction" + str(predicted_data_LG))
+
+        predicted_data_KNN = knn_object.predict(test_X.T)
+        print("KNN - Prediction" + str(predicted_data_KNN))
+
+        predicted_data_Centroid = centroid_object.predict(test_X.T)
+        print("Centroid - Prediction" + str(predicted_data_Centroid))
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
