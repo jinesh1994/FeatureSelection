@@ -151,9 +151,9 @@ if __name__ == '__main__':
         # d: centroid method
         centroid_object = NearestCentroid()
         centroid_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
-
-        test_filename = "GenomeTestX.txt"
-        test_X_df = pd.read_csv(test_filename, header=None, sep=',')
+        user_test_file_name = input('please enter file name or location of test data')
+        # test_filename = "GenomeTestX.txt"
+        test_X_df = pd.read_csv(user_test_file_name, header=None, sep=',')
         # change this line only if you want to test on different size of rows.
 
         # test_X = test_X_df.iloc[:100, :]
