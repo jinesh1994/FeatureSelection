@@ -6,7 +6,8 @@ from contextlib import redirect_stdout
 
 def load_data(file_path):
     try:
-        if 'nome' in file_path:
+        # for data which has class numbers(labels) in 1st row.
+        if 'ris' not in file_path:
             data_frame = pd.read_csv(file_path, header=None, sep=",")
             data_frame_T = data_frame.T
             class_numbers = data_frame_T[0]
@@ -31,7 +32,8 @@ def load_data(file_path):
 def f_test_for_iris(data, label_values):
     try:
         # column wise mean of the dataframe.
-        # os.remove('jenil_result.txt')
+        if os.path.isfile('jenil_result.txt'):
+            os.remove('jenil_result.txt')
         data_mean = data.iloc[:, :-1].mean()
         total_class_numbers = set(data.iloc[:, -1])
         data_mean_float = []
@@ -76,7 +78,7 @@ def f_test_for_iris(data, label_values):
                 with redirect_stdout(f):
                     print(value, final_result)
         container_for_groups_sorted_keys = sorted(container_for_groups.items(), key=lambda t: t[1], reverse=True)
-        select_rows = int(input('\n please select rows you want: '))
+        select_rows = int(input('\nplease select rows you want: '))
         get_top_data_as_per_user(data, container_for_groups_sorted_keys, select_rows, label_values)
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -87,13 +89,15 @@ def f_test_for_iris(data, label_values):
 def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
     try:
         data_frame = pd.DataFrame()
-        for i in range(input_value):
+        data_frame.insert(0, 0, list(labels.values))
+        for i in range(0, input_value):
             temp = all_data[dictionary[i][0]]
-            data_frame.insert(i, i, temp)
-        data_frame.index = labels.index
-        new_data_frame = pd.concat([data_frame, labels], axis=1)
-        new_data_frame = new_data_frame.rename(columns={new_data_frame.columns[-1]: "class numbers"})
-        new_data_frame.to_csv('jenil_top_{}_data.csv'.format(input_value), sep=',', header=None, index=False)
+            data_frame.insert(i, i + 1, temp)
+        new_data_frame = pd.DataFrame()
+        for j in sorted(data_frame.columns.values):
+            new_data_frame.insert(int(j), int(j), data_frame[j])
+        new_data_frame.T.to_csv('jenil_top_{}_data.csv'.format(input_value), sep=',', header=None, index=False)
+        print('jenil_top_{}_data.csv has been generated'.format(input_value))
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
