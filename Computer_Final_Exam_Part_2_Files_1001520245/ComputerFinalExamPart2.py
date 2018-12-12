@@ -6,14 +6,16 @@ from itertools import islice
 from sklearn.svm import SVC
 from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import KNeighborsClassifier, NearestCentroid
+from Task_1_2_3 import k_means_algo
 
 
 def load_data(file_path):
     try:
         # for data which has class numbers(labels) in 1st row.
         if 'ris' not in file_path:
+            # 1st row has all the labels.
             data_frame = pd.read_csv(file_path, header=None, sep=",")
-            data_frame_T = data_frame.T
+            data_frame_T = data_frame
             class_numbers = data_frame_T[0]
             data_frame_T = data_frame_T.iloc[:, 1:].reset_index(drop=True)
             data_frame_T.index = class_numbers.index
@@ -130,51 +132,58 @@ def get_top_data_as_per_user(all_data, dictionary, input_value, labels):
 
 if __name__ == '__main__':
     try:
-        user_input = input('please provide file name of full file path: ')
+        user_input = 'data_of_task_A.txt'
         data, labels, data_without_labels = load_data(user_input)
         rows, index = f_test(data=data, label_values=labels)
         data_frame_val = pd.read_csv('jenil_top_{}_ranked_data.csv'.format(rows), header=None, sep=',')
 
+        # data_frame = data_frame_val.T
+        data_frame_without_label = data_frame_val.iloc[1:, :]
+        # labels are in columns which has size (100,0)
+        labels = data_frame_val.transpose()[0].values
+        # return data_frame, labels, data_frame_without_label
+        k_means_algo(data_frame_without_label, labels, 12)
+
         # Task B
         # a: SVM linear kernel
-        SVM_classifier_object = SVC(kernel='linear')
-        SVM_classifier_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
-
-        # b: linear regression
-        linear_regression_object = LinearRegression()
-        linear_regression_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
-
-        # c: KNN (k=3)
-        knn_object = KNeighborsClassifier(n_neighbors=3)
-        knn_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
-
-        # d: centroid method
-        centroid_object = NearestCentroid()
-        centroid_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
-        user_test_file_name = input('please enter file name or location of test data')
-        # test_filename = "GenomeTestX.txt"
-        test_X_df = pd.read_csv(user_test_file_name, header=None, sep=',')
-        # change this line only if you want to test on different size of rows.
-
-        # test_X = test_X_df.iloc[:100, :]
-        new_test_data_frame = pd.DataFrame()
-        test_X_df = test_X_df.T
-        test_X_df.columns = range(1, test_X_df.shape[1] + 1)
-        for i, value in enumerate(index):
-            temp = test_X_df[int(value)]
-            new_test_data_frame.insert(i, i, temp)
-
-        predicted_data_SVM = SVM_classifier_object.predict(new_test_data_frame)
-        print("SVM - Prediction" + str(predicted_data_SVM) + '\n')
-
-        predicted_data_LG = linear_regression_object.predict(new_test_data_frame)
-        print("Linear Regression - Prediction" + str(predicted_data_LG) + '\n')
-
-        predicted_data_KNN = knn_object.predict(new_test_data_frame)
-        print("KNN - Prediction" + str(predicted_data_KNN) + '\n')
-
-        predicted_data_Centroid = centroid_object.predict(new_test_data_frame)
-        print("Centroid - Prediction" + str(predicted_data_Centroid) + '\n')
+        # SVM_classifier_object = SVC(kernel='linear')
+        # SVM_classifier_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+        #
+        # # b: linear regression
+        # linear_regression_object = LinearRegression()
+        # linear_regression_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+        #
+        # # c: KNN (k=3)
+        # knn_object = KNeighborsClassifier(n_neighbors=3)
+        # knn_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+        #
+        # # d: centroid method
+        # centroid_object = NearestCentroid()
+        # centroid_object.fit(data_frame_val.T.iloc[:, 1:], data_frame_val.T.iloc[:, 0])
+        # user_test_file_name = input('please enter file name or location of test data')
+        # # test_filename = "GenomeTestX.txt"
+        # test_X_df = pd.read_csv(user_test_file_name, header=None, sep=',')
+        # # change this line only if you want to test on different size of rows.
+        #
+        # # test_X = test_X_df.iloc[:100, :]
+        # new_test_data_frame = pd.DataFrame()
+        # test_X_df = test_X_df.T
+        # test_X_df.columns = range(1, test_X_df.shape[1] + 1)
+        # for i, value in enumerate(index):
+        #     temp = test_X_df[int(value)]
+        #     new_test_data_frame.insert(i, i, temp)
+        #
+        # predicted_data_SVM = SVM_classifier_object.predict(new_test_data_frame)
+        # print("SVM - Prediction" + str(predicted_data_SVM) + '\n')
+        #
+        # predicted_data_LG = linear_regression_object.predict(new_test_data_frame)
+        # print("Linear Regression - Prediction" + str(predicted_data_LG) + '\n')
+        #
+        # predicted_data_KNN = knn_object.predict(new_test_data_frame)
+        # print("KNN - Prediction" + str(predicted_data_KNN) + '\n')
+        #
+        # predicted_data_Centroid = centroid_object.predict(new_test_data_frame)
+        # print("Centroid - Prediction" + str(predicted_data_Centroid) + '\n')
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]

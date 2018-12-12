@@ -1,4 +1,5 @@
 import pandas as pd
+from Task_1_2_3 import k_means_algo
 
 
 # for char in 'jenil'.lower():
@@ -136,11 +137,20 @@ def splitData2TestTrain(filename, number_per_class, test_instances, train_first=
         print(e)
 
 
+# Task A
+class_ids = letter_to_number('nilsaj')
+student_id = '360745'
+for i in student_id:
+    class_ids.append(int(i))
+print('12 characters are', class_ids)
+# next line will give you data which has 12 classes.
+data_frame = pickDataClass('HandWrittenLetters.txt', class_ids)
+data_frame.to_csv('data_of_task_A.txt', sep=',', header=None, index=False)
 
-# class_ids = letter_to_number('jenil')
-# datas = pickDataClass('HandWrittenLetters.txt', class_ids)
-# train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels, test_data_with_labels = splitData2TestTrain(
-#     datas, 39, 19, True)
-
-# print(train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels,
-#       test_data_with_labels)
+# Task B,C,D,E
+data_frame = data_frame.T
+data_frame_without_label = data_frame.iloc[1:, :]
+# labels are in columns which has size (100,0)
+labels = data_frame.transpose()[0].values
+# return data_frame, labels, data_frame_without_label
+k_means_algo(data_frame_without_label, labels, 12)
