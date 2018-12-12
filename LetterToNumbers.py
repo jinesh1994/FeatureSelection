@@ -134,9 +134,9 @@ def splitData2TestTrain(filename, number_per_class, test_instances, train_first=
         print(e)
 
 
-class_ids = letter_to_number('jenil')
-datas = pickDataClass('HandWrittenLetters.txt', class_ids)
-train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels, test_data_with_labels = splitData2TestTrain(
-    datas, 39, 19, True)
-print(train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels,
-      test_data_with_labels)
+# class_ids = letter_to_number('jenil')
+# datas = pickDataClass('HandWrittenLetters.txt', class_ids)
+# train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels, test_data_with_labels = splitData2TestTrain(
+#     datas, 39, 19, True)
+# print(train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels,
+#       test_data_with_labels)
