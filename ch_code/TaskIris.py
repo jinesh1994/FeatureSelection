@@ -5,7 +5,7 @@ from Ch_Datahandler import load_dataframe
 from algos import FTest
 
 
-filename = '../Iris.txt'
+filename = 'Iris.txt'
 
 train_data_frame = load_dataframe(filename)
 # print('train_data_frame1', type(train_data_frame))
@@ -22,4 +22,4 @@ train_Y = train_data_frame.iloc[0,:]
 train_X = train_data_frame.iloc[1:,:]
 # print(train_data_frame)
 labels, f_test_data = FTest.calculate(train_X=train_X, train_Y=train_Y)
-[print(f) for f in f_test_data]
+[print('line_number:', f['line_number'], '  F-score:', f['F-score']) for f in f_test_data]

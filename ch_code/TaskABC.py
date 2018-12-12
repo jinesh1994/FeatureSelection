@@ -7,8 +7,7 @@ from Ch_Datahandler import load_dataframe, store_data
 from algos import FTest, SVM, LinearRegressionMethod
 
 # Task A
-filename = '../GenomeTrainXY.txt'
-# filename = '../trainDataXY.txt'
+filename = 'GenomeTrainXY.txt'
 # filename = '../ATNTFaceImages400.txt'
 # filename = '../HandWrittenLetters.txt'
 
@@ -16,7 +15,7 @@ train_data_frame = load_dataframe(filename)
 
 train_Y = train_data_frame.iloc[0, :]
 train_X = train_data_frame.iloc[1:, :]
-# print(train_data_frame)
+
 
 labels, f_test_data = FTest.calculate(train_X=train_X, train_Y=train_Y)
 
@@ -24,6 +23,7 @@ top_n = 100
 
 top_n_f_data = sorted(f_test_data, key=lambda x: x['F-score'], reverse=True)[:top_n]
 
+print('\nTaskA\n')
 [print('line_number:', f['line_number'], '  F-score:', f['F-score']) for f in top_n_f_data]
 
 updated_train_X = [f['data'] for f in top_n_f_data]
@@ -51,8 +51,8 @@ centroid = NearestCentroid()
 centroid.fit(train_X_df.T, updated_train_Y)
 
 # Task C
-test_filename = "../GenomeTestX.txt"
-# test_filename = "../testDataX.txt"
+print('\n\nTaskC\n')
+test_filename = "GenomeTestX.txt"
 test_X_df = load_dataframe(test_filename)
 test_X = [test_X_df.iloc[f['index'], :] for f in top_n_f_data]
 test_X_df = pd.DataFrame(test_X)
