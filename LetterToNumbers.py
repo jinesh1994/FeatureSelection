@@ -129,6 +129,8 @@ def splitData2TestTrain(filename, number_per_class, test_instances, train_first=
         test_X = pd.DataFrame(test_X)
         train_data_with_labels = pd.DataFrame(train_data_with_labels)
         test_data_with_labels = pd.DataFrame(test_data_with_labels)
+        # train_data_with_labels.to_csv('train_data_for_quiz_2.csv', sep=',', header=None, index=False)
+        # test_data_with_labels.to_csv('test_data_for_quiz_2.csv', sep=',', header=None, index=False)
         return train_X, train_Y, test_X, test_Y, train_data_with_labels, test_data_with_labels
     except Exception as e:
         print(e)
@@ -136,7 +138,9 @@ def splitData2TestTrain(filename, number_per_class, test_instances, train_first=
 
 class_ids = letter_to_number('jenil')
 datas = pickDataClass('HandWrittenLetters.txt', class_ids)
+# TODO transpose the data and pass it to function of ftest
 train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels, test_data_with_labels = splitData2TestTrain(
     datas, 39, 19, True)
-print(train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels,
-      test_data_with_labels)
+
+# print(train_data_set_without_labels, train_y, test_data_set_without_labels, test_y, train_data_with_labels,
+#       test_data_with_labels)
